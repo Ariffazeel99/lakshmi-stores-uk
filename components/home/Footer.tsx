@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { PhoneCall, Mail, MapPin, ShieldCheck, Heart, Send } from 'lucide-react';
 
 export const Footer: React.FC = () => {
@@ -41,19 +42,19 @@ export const Footer: React.FC = () => {
         
         {/* Brand info */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-gold-500 text-brand-deep font-serif font-black text-xl flex items-center justify-center">
+          <Link href="/" className="flex items-center gap-2 group cursor-pointer inline-flex">
+            <div className="w-9 h-9 rounded-xl bg-gold-500 text-brand-deep font-serif font-black text-xl flex items-center justify-center group-hover:scale-105 transition-transform">
               L
             </div>
             <div>
-              <span className="font-serif font-extrabold text-xl tracking-tight text-white">
+              <span className="font-serif font-extrabold text-xl tracking-tight text-white group-hover:text-gold-400 transition-colors">
                 LAKSHMI STORES UK
               </span>
               <p className="text-[10px] text-gold-400 font-bold uppercase tracking-wider">
                 Authentic Indian Supermarket
               </p>
             </div>
-          </div>
+          </Link>
 
           <p className="text-emerald-200/90 leading-relaxed text-xs">
             Lakshmi Stores UK is the premier online South & North Indian grocery store serving families across London, Birmingham, Manchester, Edinburgh, and mainland Europe. Bringing authentic regional taste, fresh air produce, and traditional pooja essentials directly to your doorstep.

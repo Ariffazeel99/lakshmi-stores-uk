@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { useCartStore } from '@/store/useCartStore';
 import { useWishlistStore } from '@/store/useWishlistStore';
 import { useUIStore } from '@/store/useUIStore';
@@ -46,7 +47,7 @@ export const Header: React.FC<HeaderProps> = ({ categories: initialCategories })
         
         {/* Brand Logo */}
         <div className="flex items-center gap-3">
-          <a href="#" className="flex items-center gap-2 group">
+          <Link href="/" onClick={() => setSelectedCategory(null)} className="flex items-center gap-2 group">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-800 via-brand-700 to-emerald-600 flex items-center justify-center text-gold-400 font-serif font-black text-xl shadow-emerald-glow group-hover:scale-105 transition-transform">
               L
             </div>
@@ -65,7 +66,7 @@ export const Header: React.FC<HeaderProps> = ({ categories: initialCategories })
                 <span className="text-emerald-700">Fresh Produce</span>
               </p>
             </div>
-          </a>
+          </Link>
         </div>
 
         {/* Search Bar with Category Select */}
