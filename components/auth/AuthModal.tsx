@@ -249,7 +249,7 @@ export const AuthModal: React.FC = () => {
                   <div className="space-y-2.5 max-h-60 overflow-y-auto pr-1">
                     {userOrders.map((ord) => (
                       <div
-                        key={ord._id}
+                        key={ord.order_number || String(ord._id)}
                         className="p-3.5 rounded-xl border border-slate-200/80 bg-slate-50/60 hover:bg-slate-50 hover:border-brand-500/50 transition-all flex items-center justify-between gap-3 text-xs"
                       >
                         <div className="space-y-0.5">
