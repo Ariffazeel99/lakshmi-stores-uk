@@ -1,12 +1,15 @@
 'use client';
 
 import React from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { useCartStore } from '@/store/useCartStore';
 import { useWishlistStore } from '@/store/useWishlistStore';
 import { useUIStore } from '@/store/useUIStore';
 import { Home, Search, ShoppingBag, Heart, LayoutGrid } from 'lucide-react';
 
 export const MobileBottomNav: React.FC = () => {
+  const router = useRouter();
+  const pathname = usePathname();
   const { items, toggleCart, getSubtotalGBP, formatPrice } = useCartStore();
   const { wishlistIds } = useWishlistStore();
   const { setSearchOpen, setSelectedCategory } = useUIStore();
@@ -16,13 +19,21 @@ export const MobileBottomNav: React.FC = () => {
 
   const handleHomeClick = () => {
     setSelectedCategory(null);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (pathname !== '/') {
+      router.push('/');
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleCategoriesClick = () => {
-    const el = document.getElementById('curated-shelves');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+    if (pathname !== '/') {
+      router.push('/#curated-shelves');
+    } else {
+      const el = document.getElementById('curated-shelves');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { Category } from '@/data/categories';
 import { fetchCategories } from '@/lib/api/catalog';
 import { useUIStore } from '@/store/useUIStore';
@@ -11,6 +12,8 @@ interface MegaMenuProps {
 }
 
 export const MegaMenu: React.FC<MegaMenuProps> = ({ categories: initialCategories }) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const [categories, setCategories] = useState<Category[]>(initialCategories || []);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const { setSelectedCategory } = useUIStore();
@@ -24,9 +27,13 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ categories: initialCategorie
   const handleSelectCategory = (catName: string | null) => {
     setSelectedCategory(catName);
     setActiveCategory(null);
-    const shelvesEl = document.getElementById('curated-shelves');
-    if (shelvesEl) {
-      shelvesEl.scrollIntoView({ behavior: 'smooth' });
+    if (pathname !== '/') {
+      router.push('/#curated-shelves');
+    } else {
+      const shelvesEl = document.getElementById('curated-shelves');
+      if (shelvesEl) {
+        shelvesEl.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   };
 

@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 import { useCartStore } from '@/store/useCartStore';
 import { useWishlistStore } from '@/store/useWishlistStore';
 import { useUIStore } from '@/store/useUIStore';
@@ -15,6 +16,8 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ categories: initialCategories }) => {
+  const router = useRouter();
+  const pathname = usePathname();
   const [categories, setCategories] = React.useState<Category[]>(initialCategories || []);
   const { items, toggleCart, getSubtotalGBP, formatPrice } = useCartStore();
   const { wishlistIds } = useWishlistStore();
@@ -79,7 +82,11 @@ export const Header: React.FC<HeaderProps> = ({ categories: initialCategories })
               onChange={(e) => {
                 const val = e.target.value || null;
                 setSelectedCategory(val);
-                document.getElementById('curated-shelves')?.scrollIntoView({ behavior: 'smooth' });
+                if (pathname !== '/') {
+                  router.push('/#curated-shelves');
+                } else {
+                  document.getElementById('curated-shelves')?.scrollIntoView({ behavior: 'smooth' });
+                }
               }}
               className="bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-2.5 border-r border-slate-200 outline-none cursor-pointer hover:bg-slate-200/60 transition-colors"
             >
