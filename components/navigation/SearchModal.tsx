@@ -3,13 +3,16 @@
 import React, { useState } from 'react';
 import { useUIStore } from '@/store/useUIStore';
 import { useCartStore } from '@/store/useCartStore';
-import { ALL_PRODUCTS, Product } from '@/data/products';
-import { Search, X, ShoppingBag, ArrowRight, Sparkles, Star } from 'lucide-react';
+import { Product } from '@/data/products';
+import { fetchCatalog } from '@/lib/api/catalog';
+import { Search, X, ShoppingBag, ArrowRight, Sparkles, Star, Loader2 } from 'lucide-react';
 
 export const SearchModal: React.FC = () => {
   const { isSearchOpen, setSearchOpen, setQuickViewProduct } = useUIStore();
   const { addItem, formatPrice } = useCartStore();
   const [query, setQuery] = useState('');
+  const [results, setResults] = useState<Product[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -21,20 +24,33 @@ export const SearchModal: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [setSearchOpen]);
 
+  // Debounced search query to MongoDB
+  React.useEffect(() => {
+    if (!isSearchOpen) return;
+
+    const timer = setTimeout(async () => {
+      setIsSearching(true);
+      try {
+        const res = await fetchCatalog({
+          search: query.trim() || undefined,
+          limit: 16
+        });
+        if (res.success) {
+          setResults(res.data);
+        }
+      } catch (e) {
+        console.error('Search error:', e);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, [query, isSearchOpen]);
+
   if (!isSearchOpen) return null;
 
-  const filteredProducts = query.trim() === ''
-    ? ALL_PRODUCTS.slice(0, 6) // trending / featured products
-    : ALL_PRODUCTS.filter((p) => {
-        const q = query.toLowerCase();
-        return (
-          p.name.toLowerCase().includes(q) ||
-          (p.tamilName && p.tamilName.includes(query)) ||
-          p.brand.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q) ||
-          (p.subCategory && p.subCategory.toLowerCase().includes(q))
-        );
-      }).slice(0, 16);
+  const filteredProducts = results;
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-3 sm:pt-16 px-2 sm:px-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-200">

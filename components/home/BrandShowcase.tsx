@@ -1,10 +1,23 @@
 'use client';
 
 import React from 'react';
-import { BRANDS } from '@/data/brands';
+import { Brand } from '@/data/brands';
+import { fetchBrands } from '@/lib/api/catalog';
 import { Sparkles } from 'lucide-react';
 
-export const BrandShowcase: React.FC = () => {
+interface BrandShowcaseProps {
+  brands?: Brand[];
+}
+
+export const BrandShowcase: React.FC<BrandShowcaseProps> = ({ brands: initialBrands }) => {
+  const [brands, setBrands] = React.useState<Brand[]>(initialBrands || []);
+
+  React.useEffect(() => {
+    if (!initialBrands || initialBrands.length === 0) {
+      fetchBrands().then(setBrands).catch(console.error);
+    }
+  }, [initialBrands]);
+
   return (
     <section className="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex items-center justify-between mb-4 border-b border-slate-200/80 pb-3">
@@ -19,7 +32,7 @@ export const BrandShowcase: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-3">
-        {BRANDS.map((b) => (
+        {brands.slice(0, 8).map((b) => (
           <div
             key={b.id}
             className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200/70 text-center flex flex-col justify-center items-center hover:scale-105 transition-all shadow-2xs ${b.bgColor}`}
@@ -36,4 +49,3 @@ export const BrandShowcase: React.FC = () => {
     </section>
   );
 };
-

@@ -8,6 +8,7 @@ import { CartDrawer } from '@/components/cart/CartDrawer';
 import { SearchModal } from '@/components/navigation/SearchModal';
 import { ProductQuickViewModal } from '@/components/product/ProductQuickViewModal';
 import { CheckoutModal } from '@/components/cart/CheckoutModal';
+import { AuthModal } from '@/components/auth/AuthModal';
 import { Footer } from '@/components/home/Footer';
 import { MobileBottomNav } from '@/components/navigation/MobileBottomNav';
 
@@ -26,17 +27,26 @@ export const metadata: Metadata = {
   description: 'Clone & Modernized e-commerce storefront for Lakshmi Stores UK. Buy air-shipped fresh vegetables from Tamil Nadu & Kerala, Sona Masoori Rice, Toor Dal, MDH Spices, and Pooja items with express UK delivery.',
 };
 
-export default function RootLayout({
+import { getCategories } from '@/lib/dal/categories';
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  let categories: any[] = [];
+  try {
+    categories = await getCategories();
+  } catch (e) {
+    console.error('Error fetching categories for layout:', e);
+  }
+
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable} scroll-smooth`}>
       <body className="font-sans antialiased text-slate-800 bg-slate-50/50 selection:bg-brand-800 selection:text-gold-400">
         <TopAnnouncementBar />
-        <Header />
-        <MegaMenu />
+        <Header categories={categories} />
+        <MegaMenu categories={categories} />
         <main className="min-h-screen pb-16 md:pb-0">
           {children}
         </main>
@@ -47,6 +57,7 @@ export default function RootLayout({
         <SearchModal />
         <ProductQuickViewModal />
         <CheckoutModal />
+        <AuthModal />
 
         {/* Sticky Mobile Bottom Navigation Bar */}
         <MobileBottomNav />

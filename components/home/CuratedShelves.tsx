@@ -1,36 +1,56 @@
 'use client';
 
-import React, { useState } from 'react';
-import { PRODUCTS, ALL_PRODUCTS, Product } from '@/data/products';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Product } from '@/data/products';
 import { ProductCard } from '@/components/product/ProductCard';
-import { Sparkles, Plane, Flame, Tag, Percent, ShoppingBasket, ChevronDown } from 'lucide-react';
-
+import { fetchCatalog } from '@/lib/api/catalog';
 import { useUIStore } from '@/store/useUIStore';
+import { Sparkles, Plane, Flame, Tag, Percent, ShoppingBasket, ChevronDown, Loader2 } from 'lucide-react';
 
-export const CuratedShelves: React.FC = () => {
+interface CuratedShelvesProps {
+  initialProducts?: Product[];
+  initialTotal?: number;
+}
+
+export const CuratedShelves: React.FC<CuratedShelvesProps> = ({
+  initialProducts = [],
+  initialTotal = 2433
+}) => {
   const { selectedCategory, setSelectedCategory } = useUIStore();
   const [activeTab, setActiveTab] = useState<'all' | 'live-catalog' | 'air-freight' | 'weekly-offers' | 'bestsellers' | 'festive'>('all');
   const [visibleCount, setVisibleCount] = useState<number>(12);
+  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [totalCount, setTotalCount] = useState<number>(initialTotal);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  let filteredProducts: Product[] = PRODUCTS;
-  if (selectedCategory) {
-    filteredProducts = ALL_PRODUCTS.filter((p) =>
-      p.category.toLowerCase().includes(selectedCategory.toLowerCase()) ||
-      (p.subCategory && p.subCategory.toLowerCase().includes(selectedCategory.toLowerCase()))
-    );
-  } else if (activeTab === 'live-catalog') {
-    filteredProducts = ALL_PRODUCTS;
-  } else if (activeTab === 'air-freight') {
-    filteredProducts = ALL_PRODUCTS.filter((p) => p.isAirFreightFresh);
-  } else if (activeTab === 'weekly-offers') {
-    filteredProducts = ALL_PRODUCTS.filter((p) => p.isWeeklyOffer || p.options.some(o => o.originalPriceGBP));
-  } else if (activeTab === 'bestsellers') {
-    filteredProducts = ALL_PRODUCTS.filter((p) => p.isBestseller);
-  } else if (activeTab === 'festive') {
-    filteredProducts = ALL_PRODUCTS.filter((p) => p.isFestiveSpecial);
-  }
+  const loadProducts = useCallback(async (tab: string, category: string | null, limit: number) => {
+    setIsLoading(true);
+    try {
+      const tabParam = (tab !== 'all' && tab !== 'live-catalog') ? (tab as any) : undefined;
+      const catSlug = category ? category.toLowerCase().trim().replace(/[\s\W-]+/g, '-') : undefined;
 
-  const displayedProducts = filteredProducts.slice(0, visibleCount);
+      const res = await fetchCatalog({
+        tab: tabParam,
+        categorySlug: catSlug,
+        limit,
+        page: 1
+      });
+
+      if (res.success) {
+        setProducts(res.data);
+        setTotalCount(res.pagination.total);
+      }
+    } catch (err) {
+      console.error('Failed to load products from MongoDB:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // Fetch when tab or category changes
+  useEffect(() => {
+    loadProducts(activeTab, selectedCategory, visibleCount);
+  }, [activeTab, selectedCategory, visibleCount, loadProducts]);
 
   return (
     <section id="curated-shelves" className="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -65,7 +85,7 @@ export const CuratedShelves: React.FC = () => {
                   setActiveTab(tab.id as any);
                   setVisibleCount(12);
                 }}
-                className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
                   isActive
                     ? 'bg-brand-800 text-gold-400 shadow-sm scale-105'
                     : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
@@ -87,7 +107,7 @@ export const CuratedShelves: React.FC = () => {
               {selectedCategory}
             </span>
             <span className="text-[11px] sm:text-xs text-emerald-700 font-semibold">
-              ({filteredProducts.length} items found)
+              ({totalCount} items in database)
             </span>
           </div>
           <button
@@ -100,29 +120,47 @@ export const CuratedShelves: React.FC = () => {
       )}
 
       {/* Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
-        {displayedProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+      <div className="relative">
+        {isLoading && products.length === 0 ? (
+          <div className="py-24 text-center flex flex-col items-center justify-center gap-3">
+            <Loader2 className="w-8 h-8 text-brand-700 animate-spin" />
+            <p className="text-sm font-semibold text-slate-600">Fetching live products from MongoDB...</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Load More Button */}
-      {visibleCount < filteredProducts.length && (
+      {visibleCount < totalCount && (
         <div className="mt-10 text-center flex flex-col items-center gap-2">
           <p className="text-xs text-slate-500 font-medium">
-            Showing <span className="font-bold text-slate-700">{displayedProducts.length}</span> of <span className="font-bold text-slate-700">{filteredProducts.length}</span> products
+            Showing <span className="font-bold text-slate-700">{products.length}</span> of{' '}
+            <span className="font-bold text-slate-700">{totalCount}</span> live database products
           </p>
           <button
+            disabled={isLoading}
             onClick={() => setVisibleCount((prev) => prev + 12)}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-800 hover:bg-brand-900 text-gold-400 font-bold text-sm shadow-md hover:shadow-lg transition-all transform active:scale-95"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-800 hover:bg-brand-900 text-gold-400 font-bold text-sm shadow-md hover:shadow-lg transition-all transform active:scale-95 disabled:opacity-50 cursor-pointer"
           >
-            <span>Load More Products</span>
-            <ChevronDown className="w-4 h-4 text-gold-400" />
+            {isLoading ? (
+              <>
+                <Loader2 className="w-4 h-4 text-gold-400 animate-spin" />
+                <span>Loading more...</span>
+              </>
+            ) : (
+              <>
+                <span>Load More Products</span>
+                <ChevronDown className="w-4 h-4 text-gold-400" />
+              </>
+            )}
           </button>
         </div>
       )}
-
     </section>
   );
 };
-

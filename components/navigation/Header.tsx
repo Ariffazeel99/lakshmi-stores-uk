@@ -4,13 +4,27 @@ import React from 'react';
 import { useCartStore } from '@/store/useCartStore';
 import { useWishlistStore } from '@/store/useWishlistStore';
 import { useUIStore } from '@/store/useUIStore';
+import { useAuthStore } from '@/store/useAuthStore';
+import { Category } from '@/data/categories';
+import { fetchCategories } from '@/lib/api/catalog';
 import { Search, ShoppingBag, Heart, User, Sparkles, SlidersHorizontal } from 'lucide-react';
-import { CATEGORIES } from '@/data/categories';
 
-export const Header: React.FC = () => {
+interface HeaderProps {
+  categories?: Category[];
+}
+
+export const Header: React.FC<HeaderProps> = ({ categories: initialCategories }) => {
+  const [categories, setCategories] = React.useState<Category[]>(initialCategories || []);
   const { items, toggleCart, getSubtotalGBP, formatPrice } = useCartStore();
   const { wishlistIds } = useWishlistStore();
   const { setSearchOpen, searchQuery, setSearchQuery, selectedCategory, setSelectedCategory } = useUIStore();
+  const { user, isAuthenticated, openAuthModal } = useAuthStore();
+
+  React.useEffect(() => {
+    if (!initialCategories || initialCategories.length === 0) {
+      fetchCategories().then(setCategories).catch(console.error);
+    }
+  }, [initialCategories]);
 
   const totalItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = getSubtotalGBP();
@@ -61,13 +75,17 @@ export const Header: React.FC = () => {
             {/* Category Dropdown Filter */}
             <select
               value={selectedCategory || ''}
-              onChange={(e) => setSelectedCategory(e.target.value || null)}
+              onChange={(e) => {
+                const val = e.target.value || null;
+                setSelectedCategory(val);
+                document.getElementById('curated-shelves')?.scrollIntoView({ behavior: 'smooth' });
+              }}
               className="bg-slate-100 text-slate-700 text-xs font-semibold px-3 py-2.5 border-r border-slate-200 outline-none cursor-pointer hover:bg-slate-200/60 transition-colors"
             >
               <option value="">All Categories</option>
-              {CATEGORIES.map((cat) => (
+              {categories.map((cat) => (
                 <option key={cat.id} value={cat.name}>
-                  {cat.name}
+                  {cat.name} ({cat.itemCount})
                 </option>
               ))}
             </select>
@@ -113,13 +131,24 @@ export const Header: React.FC = () => {
           </button>
 
           {/* Account */}
-          <button className="hidden sm:flex items-center gap-2 text-slate-700 hover:text-brand-800 px-2.5 py-1.5 rounded-lg hover:bg-slate-50 transition-colors">
-            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600">
-              <User className="w-4 h-4" />
+          <button 
+            onClick={() => openAuthModal()}
+            className="flex items-center gap-2 text-slate-700 hover:text-brand-800 px-2.5 py-1.5 rounded-lg hover:bg-slate-50 transition-colors cursor-pointer"
+          >
+            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 font-bold text-xs">
+              {isAuthenticated && user ? (
+                <span className="text-brand-800 uppercase">{user.firstName.charAt(0)}</span>
+              ) : (
+                <User className="w-4 h-4" />
+              )}
             </div>
             <div className="text-left hidden lg:block">
-              <p className="text-[11px] font-medium text-slate-400 leading-none">Account</p>
-              <p className="text-xs font-bold text-slate-800 leading-tight">Sign In / Register</p>
+              <p className="text-[11px] font-medium text-slate-400 leading-none">
+                {isAuthenticated && user ? `Hi, ${user.firstName}` : 'Account'}
+              </p>
+              <p className="text-xs font-bold text-slate-800 leading-tight">
+                {isAuthenticated ? 'My Account' : 'Sign In / Register'}
+              </p>
             </div>
           </button>
 
@@ -185,7 +214,7 @@ export const Header: React.FC = () => {
           >
             All Items
           </button>
-          {CATEGORIES.map((cat) => {
+          {categories.map((cat) => {
             const isActive = selectedCategory === cat.name;
             return (
               <button

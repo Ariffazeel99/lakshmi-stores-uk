@@ -1,12 +1,24 @@
 'use client';
 
 import React from 'react';
-import { CATEGORIES } from '@/data/categories';
+import { Category } from '@/data/categories';
+import { fetchCategories } from '@/lib/api/catalog';
 import { useUIStore } from '@/store/useUIStore';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
-export const CategoryShowcase: React.FC = () => {
+interface CategoryShowcaseProps {
+  categories?: Category[];
+}
+
+export const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({ categories: initialCategories }) => {
+  const [categories, setCategories] = React.useState<Category[]>(initialCategories || []);
   const { setSelectedCategory } = useUIStore();
+
+  React.useEffect(() => {
+    if (!initialCategories || initialCategories.length === 0) {
+      fetchCategories().then(setCategories).catch(console.error);
+    }
+  }, [initialCategories]);
 
   const handleCategoryClick = (catName: string) => {
     setSelectedCategory(catName);
@@ -32,7 +44,7 @@ export const CategoryShowcase: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-8 gap-2 sm:gap-3">
-        {CATEGORIES.map((cat) => (
+        {categories.slice(0, 8).map((cat) => (
           <button
             key={cat.id}
             onClick={() => handleCategoryClick(cat.name)}
