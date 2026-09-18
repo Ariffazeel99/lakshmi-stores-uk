@@ -10,4 +10,5 @@ When modifying or adding code to `lakshmi-stores-uk`, adhere strictly to the **D
 4. **Existing Dependencies**: We already have `mongodb`, `@vercel/functions`, `lucide-react`, `tailwindcss`, `clsx`, `zustand`, and `framer-motion`. Do NOT install redundant libraries.
 5. **DRY & Minimal**: Write the simplest, cleanest solution that solves the problem. Keep diffs tight and focused.
 6. **No Compromise on Correctness**: Be lazy about code quantity, but rigorous about validation, typing, security, and error handling.
+7. **Automatic Deployment on Push**: Whenever committing and pushing code to GitHub, always ensure deployment to Vercel is triggered, verified, and reported automatically without requiring a separate user prompt.
 
