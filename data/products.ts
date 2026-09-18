@@ -261,3 +261,9 @@ export const PRODUCTS: Product[] = [
   }
 ];
 
+import liveProductsRaw from './live_products.json';
+export const ALL_PRODUCTS: Product[] = [
+  ...PRODUCTS,
+  ...(liveProductsRaw as Product[])
+];
+

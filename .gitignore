@@ -28,3 +28,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# extractor downloaded images
+/lakshmi_store_data/images
+/crawled_pages
+

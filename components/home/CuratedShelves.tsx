@@ -1,23 +1,28 @@
 'use client';
 
 import React, { useState } from 'react';
-import { PRODUCTS, Product } from '@/data/products';
+import { PRODUCTS, ALL_PRODUCTS, Product } from '@/data/products';
 import { ProductCard } from '@/components/product/ProductCard';
-import { Sparkles, Plane, Flame, Tag, Percent } from 'lucide-react';
+import { Sparkles, Plane, Flame, Tag, Percent, ShoppingBasket, ChevronDown } from 'lucide-react';
 
 export const CuratedShelves: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'all' | 'air-freight' | 'weekly-offers' | 'bestsellers' | 'festive'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'live-catalog' | 'air-freight' | 'weekly-offers' | 'bestsellers' | 'festive'>('all');
+  const [visibleCount, setVisibleCount] = useState<number>(12);
 
   let filteredProducts: Product[] = PRODUCTS;
-  if (activeTab === 'air-freight') {
-    filteredProducts = PRODUCTS.filter((p) => p.isAirFreightFresh);
+  if (activeTab === 'live-catalog') {
+    filteredProducts = ALL_PRODUCTS;
+  } else if (activeTab === 'air-freight') {
+    filteredProducts = ALL_PRODUCTS.filter((p) => p.isAirFreightFresh);
   } else if (activeTab === 'weekly-offers') {
-    filteredProducts = PRODUCTS.filter((p) => p.isWeeklyOffer || p.options.some(o => o.originalPriceGBP));
+    filteredProducts = ALL_PRODUCTS.filter((p) => p.isWeeklyOffer || p.options.some(o => o.originalPriceGBP));
   } else if (activeTab === 'bestsellers') {
-    filteredProducts = PRODUCTS.filter((p) => p.isBestseller);
+    filteredProducts = ALL_PRODUCTS.filter((p) => p.isBestseller);
   } else if (activeTab === 'festive') {
-    filteredProducts = PRODUCTS.filter((p) => p.isFestiveSpecial);
+    filteredProducts = ALL_PRODUCTS.filter((p) => p.isFestiveSpecial);
   }
+
+  const displayedProducts = filteredProducts.slice(0, visibleCount);
 
   return (
     <section id="curated-shelves" className="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,7 +41,8 @@ export const CuratedShelves: React.FC = () => {
         {/* Tab Buttons */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
           {[
-            { id: 'all', label: 'All Products', icon: Sparkles },
+            { id: 'all', label: '⭐ Curated Specials', icon: Sparkles },
+            { id: 'live-catalog', label: '🛒 All 2,433+ Live Products', icon: ShoppingBasket },
             { id: 'air-freight', label: '✈ Air Freight Veggies', icon: Plane },
             { id: 'weekly-offers', label: '🏷 Weekly Offers', icon: Percent },
             { id: 'bestsellers', label: '🔥 UK Bestsellers', icon: Tag },
@@ -47,7 +53,10 @@ export const CuratedShelves: React.FC = () => {
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id as any)}
+                onClick={() => {
+                  setActiveTab(tab.id as any);
+                  setVisibleCount(12);
+                }}
                 className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${
                   isActive
                     ? 'bg-brand-800 text-gold-400 shadow-sm scale-105'
@@ -63,10 +72,26 @@ export const CuratedShelves: React.FC = () => {
 
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-        {filteredProducts.map((product) => (
+        {displayedProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
+
+      {/* Load More Button */}
+      {visibleCount < filteredProducts.length && (
+        <div className="mt-10 text-center flex flex-col items-center gap-2">
+          <p className="text-xs text-slate-500 font-medium">
+            Showing <span className="font-bold text-slate-700">{displayedProducts.length}</span> of <span className="font-bold text-slate-700">{filteredProducts.length}</span> products
+          </p>
+          <button
+            onClick={() => setVisibleCount((prev) => prev + 12)}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-800 hover:bg-brand-900 text-gold-400 font-bold text-sm shadow-md hover:shadow-lg transition-all transform active:scale-95"
+          >
+            <span>Load More Products</span>
+            <ChevronDown className="w-4 h-4 text-gold-400" />
+          </button>
+        </div>
+      )}
 
     </section>
   );

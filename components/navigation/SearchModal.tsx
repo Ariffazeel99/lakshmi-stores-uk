@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useUIStore } from '@/store/useUIStore';
 import { useCartStore } from '@/store/useCartStore';
-import { PRODUCTS, Product } from '@/data/products';
+import { ALL_PRODUCTS, Product } from '@/data/products';
 import { Search, X, ShoppingBag, ArrowRight, Sparkles, Star } from 'lucide-react';
 
 export const SearchModal: React.FC = () => {
@@ -14,13 +14,17 @@ export const SearchModal: React.FC = () => {
   if (!isSearchOpen) return null;
 
   const filteredProducts = query.trim() === ''
-    ? PRODUCTS.slice(0, 4) // trending products
-    : PRODUCTS.filter((p) =>
-        p.name.toLowerCase().includes(query.toLowerCase()) ||
-        (p.tamilName && p.tamilName.includes(query)) ||
-        p.brand.toLowerCase().includes(query.toLowerCase()) ||
-        p.category.toLowerCase().includes(query.toLowerCase())
-      );
+    ? ALL_PRODUCTS.slice(0, 6) // trending / featured products
+    : ALL_PRODUCTS.filter((p) => {
+        const q = query.toLowerCase();
+        return (
+          p.name.toLowerCase().includes(q) ||
+          (p.tamilName && p.tamilName.includes(query)) ||
+          p.brand.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q) ||
+          (p.subCategory && p.subCategory.toLowerCase().includes(q))
+        );
+      }).slice(0, 16);
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 px-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-200">
