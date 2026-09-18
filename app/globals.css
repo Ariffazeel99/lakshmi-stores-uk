@@ -43,3 +43,17 @@ body {
   -webkit-backdrop-filter: blur(12px);
 }
 
+/* Hide scrollbar for mobile pill carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* iOS Safe Area bottom padding for iPhone bottom bar */
+.safe-area-pb {
+  padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+}
+

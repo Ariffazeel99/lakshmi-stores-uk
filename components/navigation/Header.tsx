@@ -15,6 +15,17 @@ export const Header: React.FC = () => {
   const totalItemCount = items.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = getSubtotalGBP();
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setSearchOpen(true);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [setSearchOpen]);
+
   return (
     <header className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
@@ -145,6 +156,52 @@ export const Header: React.FC = () => {
 
         </div>
 
+      </div>
+
+      {/* Mobile Prominent Search Bar & Category Quick Bar */}
+      <div className="md:hidden px-4 pb-2.5 pt-0.5 space-y-2 border-t border-slate-100 bg-white">
+        <div
+          onClick={() => setSearchOpen(true)}
+          className="flex items-center w-full bg-slate-100/90 hover:bg-slate-200/60 rounded-xl px-3.5 py-2.5 border border-slate-200 text-slate-400 cursor-pointer shadow-2xs transition-colors"
+        >
+          <Search className="w-4 h-4 text-brand-700 mr-2 flex-shrink-0" />
+          <span className="text-xs text-slate-500 font-medium truncate flex-1 text-left">
+            Search 2,433+ items (onions, rice, dal, MDH)...
+          </span>
+          <span className="text-[10px] font-bold bg-brand-800 text-gold-400 px-2 py-0.5 rounded shadow-2xs">
+            Search
+          </span>
+        </div>
+
+        {/* Horizontal Category Quick Scroll Bar for Mobile */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 -mx-4 px-4">
+          <button
+            onClick={() => setSelectedCategory(null)}
+            className={`px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap transition-all flex-shrink-0 ${
+              !selectedCategory
+                ? 'bg-brand-800 text-gold-400 shadow-xs'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200/80'
+            }`}
+          >
+            All Items
+          </button>
+          {CATEGORIES.map((cat) => {
+            const isActive = selectedCategory === cat.name;
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.name)}
+                className={`px-3 py-1 rounded-full text-[11px] font-bold whitespace-nowrap transition-all flex-shrink-0 ${
+                  isActive
+                    ? 'bg-brand-800 text-gold-400 shadow-xs'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200/80'
+                }`}
+              >
+                {cat.name}
+              </button>
+            );
+          })}
+        </div>
       </div>
     </header>
   );

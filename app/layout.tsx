@@ -9,6 +9,7 @@ import { SearchModal } from '@/components/navigation/SearchModal';
 import { ProductQuickViewModal } from '@/components/product/ProductQuickViewModal';
 import { CheckoutModal } from '@/components/cart/CheckoutModal';
 import { Footer } from '@/components/home/Footer';
+import { MobileBottomNav } from '@/components/navigation/MobileBottomNav';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -36,7 +37,7 @@ export default function RootLayout({
         <TopAnnouncementBar />
         <Header />
         <MegaMenu />
-        <main className="min-h-screen">
+        <main className="min-h-screen pb-16 md:pb-0">
           {children}
         </main>
         <Footer />
@@ -46,6 +47,9 @@ export default function RootLayout({
         <SearchModal />
         <ProductQuickViewModal />
         <CheckoutModal />
+
+        {/* Sticky Mobile Bottom Navigation Bar */}
+        <MobileBottomNav />
       </body>
     </html>
   );

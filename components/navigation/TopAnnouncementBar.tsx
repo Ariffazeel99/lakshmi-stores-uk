@@ -9,14 +9,13 @@ export const TopAnnouncementBar: React.FC = () => {
 
   return (
     <div className="bg-brand-deep text-white text-xs font-medium border-b border-brand-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-1.5 sm:py-2 flex items-center justify-between gap-2">
         
         {/* Left Promo message */}
-        <div className="flex items-center gap-2 text-amber-300">
-          <Truck className="w-4 h-4 text-gold-400 animate-pulse-subtle" />
-          <span className="font-semibold text-white">FREE UK Express Delivery</span>
-          <span className="hidden md:inline text-emerald-200">on orders over £50</span>
-          <span className="bg-gold-500/20 text-gold-300 border border-gold-400/40 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ml-1">
+        <div className="flex items-center gap-1.5 sm:gap-2 text-amber-300 min-w-0">
+          <Truck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-gold-400 animate-pulse-subtle flex-shrink-0" />
+          <span className="font-semibold text-white text-[11px] sm:text-xs truncate">FREE Delivery over £50</span>
+          <span className="hidden sm:inline bg-gold-500/20 text-gold-300 border border-gold-400/40 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ml-1">
             Same Day Dispatch
           </span>
         </div>

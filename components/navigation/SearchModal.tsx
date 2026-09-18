@@ -11,6 +11,16 @@ export const SearchModal: React.FC = () => {
   const { addItem, formatPrice } = useCartStore();
   const [query, setQuery] = useState('');
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSearchOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [setSearchOpen]);
+
   if (!isSearchOpen) return null;
 
   const filteredProducts = query.trim() === ''
@@ -27,16 +37,16 @@ export const SearchModal: React.FC = () => {
       }).slice(0, 16);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 px-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-3 sm:pt-16 px-2 sm:px-4 bg-slate-900/60 backdrop-blur-md animate-in fade-in duration-200">
       
       {/* Click outside backdrop */}
       <div className="fixed inset-0" onClick={() => setSearchOpen(false)} />
 
       {/* Modal Container */}
-      <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden z-10 animate-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-2xl bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden z-10 animate-in zoom-in-95 duration-200 max-h-[88vh] sm:max-h-[80vh] flex flex-col">
         
         {/* Search Input Bar */}
-        <div className="flex items-center px-4 py-3.5 border-b border-slate-100 bg-slate-50/80">
+        <div className="flex items-center px-3.5 sm:px-4 py-3 sm:py-3.5 border-b border-slate-100 bg-slate-50/80">
           <Search className="w-5 h-5 text-brand-700 mr-3 flex-shrink-0" />
           <input
             type="text"
@@ -79,7 +89,7 @@ export const SearchModal: React.FC = () => {
         </div>
 
         {/* Results List */}
-        <div className="max-h-[60vh] overflow-y-auto p-4 space-y-3">
+        <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-2.5 sm:space-y-3">
           <div className="flex items-center justify-between text-xs text-slate-500 px-1 font-semibold uppercase tracking-wider">
             <span>{query ? `Search Results (${filteredProducts.length})` : 'Trending & Air Freight Fresh Items'}</span>
           </div>
@@ -105,6 +115,9 @@ export const SearchModal: React.FC = () => {
                   <img
                     src={prod.image}
                     alt={prod.name}
+                    onError={(e) => {
+                      e.currentTarget.src = 'https://cdn.shopify.com/s/files/1/0152/6530/0544/products/curry-leaves_0e540a77-2c5e-4263-9594-01f0f63e9bde.jpg?v=1642501396';
+                    }}
                     className="w-14 h-14 object-cover rounded-lg border border-slate-200 flex-shrink-0 group-hover:scale-105 transition-transform"
                   />
                   <div>

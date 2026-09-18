@@ -28,7 +28,7 @@ export const CheckoutModal: React.FC = () => {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md animate-in fade-in duration-200">
       <div className="fixed inset-0" onClick={() => setCheckoutOpen(false)} />
 
-      <div className="relative w-full max-w-xl bg-white rounded-3xl shadow-2xl overflow-hidden z-10 p-6 md:p-8 animate-in zoom-in-95 duration-200 border border-slate-100">
+      <div className="relative w-full max-w-xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden z-10 p-5 sm:p-8 animate-in zoom-in-95 duration-200 border border-slate-100 max-h-[92vh] overflow-y-auto">
         
         {/* Close */}
         <button

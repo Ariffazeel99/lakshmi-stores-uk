@@ -123,7 +123,7 @@ export const Footer: React.FC = () => {
       </div>
 
       {/* Bottom Copyright */}
-      <div className="border-t border-brand-800 bg-brand-950 py-4 text-center text-[11px] text-emerald-300">
+      <div className="border-t border-brand-800 bg-brand-950 pt-4 pb-20 md:pb-4 text-center text-[11px] text-emerald-300">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p>© 2026 Lakshmi Stores UK. All Rights Reserved. Modernized E-Commerce Storefront.</p>
           <p className="flex items-center gap-1">

@@ -33,3 +33,7 @@ next-env.d.ts
 /lakshmi_store_data/images
 /crawled_pages
 
+# temporary test screenshots & scratch scripts
+*.png
+/scratch
+

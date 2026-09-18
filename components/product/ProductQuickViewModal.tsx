@@ -31,26 +31,29 @@ export const ProductQuickViewModal: React.FC = () => {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-md animate-in fade-in duration-200">
       <div className="fixed inset-0" onClick={() => setQuickViewProduct(null)} />
 
-      <div className="relative w-full max-w-3xl bg-white rounded-3xl shadow-2xl overflow-hidden z-10 grid grid-cols-1 md:grid-cols-2 animate-in zoom-in-95 duration-200 border border-slate-100">
+      <div className="relative w-full max-w-3xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden z-10 grid grid-cols-1 md:grid-cols-2 animate-in zoom-in-95 duration-200 border border-slate-100 max-h-[90vh] overflow-y-auto">
         
         {/* Close Button */}
         <button
           onClick={() => setQuickViewProduct(null)}
-          className="absolute top-4 right-4 z-20 p-2 rounded-full bg-white/80 backdrop-blur-md text-slate-500 hover:text-slate-800 hover:bg-white transition-colors shadow-sm"
+          className="absolute top-3 sm:top-4 right-3 sm:right-4 z-20 p-2 rounded-full bg-white/80 backdrop-blur-md text-slate-500 hover:text-slate-800 hover:bg-white transition-colors shadow-sm"
         >
           <X className="w-5 h-5" />
         </button>
 
         {/* Product Image Column */}
-        <div className="relative bg-slate-50 aspect-square md:aspect-auto flex items-center justify-center p-6">
+        <div className="relative bg-slate-50 aspect-4/3 sm:aspect-square md:aspect-auto flex items-center justify-center p-4 sm:p-6">
           <img
             src={quickViewProduct.image}
             alt={quickViewProduct.name}
-            className="w-full h-full max-h-[380px] object-cover rounded-2xl shadow-sm"
+            onError={(e) => {
+              e.currentTarget.src = 'https://cdn.shopify.com/s/files/1/0152/6530/0544/products/curry-leaves_0e540a77-2c5e-4263-9594-01f0f63e9bde.jpg?v=1642501396';
+            }}
+            className="w-full h-full max-h-[220px] sm:max-h-[300px] md:max-h-[380px] object-contain rounded-xl sm:rounded-2xl shadow-sm"
           />
           {quickViewProduct.isAirFreightFresh && (
-            <span className="absolute top-4 left-4 bg-amber-500 text-brand-deep text-xs font-black uppercase tracking-wider px-3 py-1 rounded-lg shadow-sm flex items-center gap-1.5">
-              <Plane className="w-3.5 h-3.5" /> Air Freight Import
+            <span className="absolute top-3 sm:top-4 left-3 sm:left-4 bg-amber-500 text-brand-deep text-[10px] sm:text-xs font-black uppercase tracking-wider px-2.5 sm:px-3 py-1 rounded-lg shadow-sm flex items-center gap-1">
+              <Plane className="w-3 sm:w-3.5 h-3 sm:h-3.5" /> Air Freight
             </span>
           )}
         </div>

@@ -18,16 +18,16 @@ export const BrandShowcase: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-3">
         {BRANDS.map((b) => (
           <div
             key={b.id}
-            className={`p-4 rounded-2xl border border-slate-200/70 text-center flex flex-col justify-center items-center hover:scale-105 transition-all shadow-2xs ${b.bgColor}`}
+            className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200/70 text-center flex flex-col justify-center items-center hover:scale-105 transition-all shadow-2xs ${b.bgColor}`}
           >
-            <span className="font-serif font-black text-base tracking-wider block">
+            <span className="font-serif font-black text-sm sm:text-base tracking-wider block">
               {b.logoText}
             </span>
-            <span className="text-[9px] font-semibold opacity-75 mt-1 line-clamp-1">
+            <span className="text-[8px] sm:text-[9px] font-semibold opacity-75 mt-0.5 sm:mt-1 line-clamp-1">
               {b.tagline}
             </span>
           </div>

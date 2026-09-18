@@ -5,12 +5,20 @@ import { PRODUCTS, ALL_PRODUCTS, Product } from '@/data/products';
 import { ProductCard } from '@/components/product/ProductCard';
 import { Sparkles, Plane, Flame, Tag, Percent, ShoppingBasket, ChevronDown } from 'lucide-react';
 
+import { useUIStore } from '@/store/useUIStore';
+
 export const CuratedShelves: React.FC = () => {
+  const { selectedCategory, setSelectedCategory } = useUIStore();
   const [activeTab, setActiveTab] = useState<'all' | 'live-catalog' | 'air-freight' | 'weekly-offers' | 'bestsellers' | 'festive'>('all');
   const [visibleCount, setVisibleCount] = useState<number>(12);
 
   let filteredProducts: Product[] = PRODUCTS;
-  if (activeTab === 'live-catalog') {
+  if (selectedCategory) {
+    filteredProducts = ALL_PRODUCTS.filter((p) =>
+      p.category.toLowerCase().includes(selectedCategory.toLowerCase()) ||
+      (p.subCategory && p.subCategory.toLowerCase().includes(selectedCategory.toLowerCase()))
+    );
+  } else if (activeTab === 'live-catalog') {
     filteredProducts = ALL_PRODUCTS;
   } else if (activeTab === 'air-freight') {
     filteredProducts = ALL_PRODUCTS.filter((p) => p.isAirFreightFresh);
@@ -39,7 +47,7 @@ export const CuratedShelves: React.FC = () => {
         </div>
 
         {/* Tab Buttons */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
           {[
             { id: 'all', label: '⭐ Curated Specials', icon: Sparkles },
             { id: 'live-catalog', label: '🛒 All 2,433+ Live Products', icon: ShoppingBasket },
@@ -70,8 +78,29 @@ export const CuratedShelves: React.FC = () => {
         </div>
       </div>
 
+      {/* Active Category Filter Indicator */}
+      {selectedCategory && (
+        <div className="mb-6 p-3 sm:p-3.5 bg-emerald-50 border border-emerald-200 rounded-xl sm:rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 shadow-2xs animate-in fade-in">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+            <span className="text-[11px] sm:text-xs text-emerald-800 font-medium">Department:</span>
+            <span className="bg-brand-800 text-gold-400 text-xs font-bold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md sm:rounded-lg">
+              {selectedCategory}
+            </span>
+            <span className="text-[11px] sm:text-xs text-emerald-700 font-semibold">
+              ({filteredProducts.length} items found)
+            </span>
+          </div>
+          <button
+            onClick={() => setSelectedCategory(null)}
+            className="text-xs font-bold text-emerald-800 hover:text-emerald-950 underline self-start sm:self-auto px-1.5 py-0.5 rounded hover:bg-emerald-100 transition-colors cursor-pointer"
+          >
+            Clear Filter (Show All)
+          </button>
+        </div>
+      )}
+
       {/* Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
         {displayedProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

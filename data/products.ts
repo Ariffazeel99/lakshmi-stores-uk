@@ -39,7 +39,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 184,
     isAirFreightFresh: true,
     isBestseller: true,
-    image: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cf?q=80&w=800&auto=format&fit=crop',
+    image: 'https://cdn.shopify.com/s/files/1/0152/6530/0544/files/8_f8736ca1-9a55-4e5a-9552-c1db85af9f47.jpg?v=1719770957',
     dietaryTags: ['Fresh Produce', '100% Natural', 'Air Freight Fresh'],
     options: [
       { weight: '250g', priceGBP: 1.99, originalPriceGBP: 2.49, inStock: true },
@@ -60,7 +60,7 @@ export const PRODUCTS: Product[] = [
     reviewCount: 312,
     isBestseller: true,
     isWeeklyOffer: true,
-    image: 'https://images.unsplash.com/photo-1585992227540-7048c1607f51?q=80&w=800&auto=format&fit=crop',
+    image: 'https://cdn.shopify.com/s/files/1/0152/6530/0544/files/productimages-selva_38_570b3c44-824e-4db2-9606-10a57493408f.png?v=1711473477',
     dietaryTags: ['Vegan', 'High Protein', 'Unpolished'],
     options: [
       { weight: '1kg', priceGBP: 2.89, originalPriceGBP: 3.49, inStock: true },
@@ -139,7 +139,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.95,
     reviewCount: 240,
     isAirFreightFresh: true,
-    image: 'https://images.unsplash.com/photo-1628771065518-0d82f1938462?q=80&w=800&auto=format&fit=crop',
+    image: 'https://cdn.shopify.com/s/files/1/0152/6530/0544/products/curry-leaves_0e540a77-2c5e-4263-9594-01f0f63e9bde.jpg?v=1642501396',
     dietaryTags: ['Air Freight Fresh', '100% Organic'],
     options: [
       { weight: '50g Pack', priceGBP: 1.19, originalPriceGBP: 1.49, inStock: true },
@@ -158,7 +158,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.8,
     reviewCount: 280,
     isBestseller: true,
-    image: 'https://images.unsplash.com/photo-1599940824399-b87987ceb72a?q=80&w=800&auto=format&fit=crop',
+    image: 'https://cdn.shopify.com/s/files/1/0152/6530/0544/products/9c5c1de2d8612165d0f484e2542a7206.jpg?v=1639168720',
     dietaryTags: ['Rich Color', 'Medium Heat'],
     options: [
       { weight: '100g', priceGBP: 1.49, originalPriceGBP: 1.79, inStock: true },
@@ -177,7 +177,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.75,
     reviewCount: 165,
     isWeeklyOffer: true,
-    image: 'https://images.unsplash.com/photo-1621996346565-e3d5d6281288?q=80&w=800&auto=format&fit=crop',
+    image: 'https://cdn.shopify.com/s/files/1/0152/6530/0544/files/BIKAJIBHUJIA200G.png?v=1730907673',
     dietaryTags: ['Vegetarian', 'Crunchy Festive Snack'],
     options: [
       { weight: '200g Pack', priceGBP: 1.79, originalPriceGBP: 2.19, inStock: true },
@@ -196,7 +196,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.85,
     reviewCount: 92,
     isAirFreightFresh: true,
-    image: 'https://images.unsplash.com/photo-1598170845058-12ef4a457539?q=80&w=800&auto=format&fit=crop',
+    image: 'https://cdn.shopify.com/s/files/1/0152/6530/0544/products/c3212f574dd6d8f9544e11e459825064.png?v=1639174018',
     dietaryTags: ['Chilled Delivery', 'Farm Fresh'],
     options: [
       { weight: '250g', priceGBP: 1.89, originalPriceGBP: 2.29, inStock: true },
@@ -215,7 +215,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.95,
     reviewCount: 88,
     isFestiveSpecial: true,
-    image: 'https://images.unsplash.com/photo-1605379399642-870262d3d051?q=80&w=800&auto=format&fit=crop',
+    image: 'https://cdn.shopify.com/s/files/1/0152/6530/0544/files/ASHTALAXSHMI_52cf0399-821b-4f15-873d-9fa3ee062e64.png?v=1736630437',
     dietaryTags: ['100% Solid Brass', 'Handicraft'],
     options: [
       { weight: 'Single Lamp (12 inch)', priceGBP: 24.99, originalPriceGBP: 29.99, inStock: true },

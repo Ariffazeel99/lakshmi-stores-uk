@@ -32,21 +32,21 @@ export const TrustPillars: React.FC = () => {
   ];
 
   return (
-    <section className="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <section className="py-6 sm:py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4">
         {PILLARS.map((p, idx) => {
           const Icon = p.icon;
           return (
             <div
               key={idx}
-              className={`p-5 rounded-2xl border ${p.color} flex items-start gap-4 transition-transform hover:-translate-y-1 shadow-xs`}
+              className={`p-3 sm:p-5 rounded-xl sm:rounded-2xl border ${p.color} flex flex-col sm:flex-row items-start gap-2.5 sm:gap-4 transition-transform hover:-translate-y-1 shadow-2xs`}
             >
-              <div className="p-3 rounded-xl bg-white shadow-xs flex-shrink-0">
-                <Icon className="w-6 h-6" />
+              <div className="p-2 sm:p-3 rounded-lg sm:rounded-xl bg-white shadow-2xs flex-shrink-0">
+                <Icon className="w-4 h-4 sm:w-6 sm:h-6" />
               </div>
               <div>
-                <h4 className="font-bold text-sm text-slate-800">{p.title}</h4>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">{p.desc}</p>
+                <h4 className="font-bold text-xs sm:text-sm text-slate-800 leading-tight">{p.title}</h4>
+                <p className="text-[10px] sm:text-xs text-slate-500 mt-1 leading-snug line-clamp-2 sm:line-clamp-none">{p.desc}</p>
               </div>
             </div>
           );

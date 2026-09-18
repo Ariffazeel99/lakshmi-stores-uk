@@ -36,7 +36,7 @@ function cleanHtml(html) {
 }
 
 const mappedProducts = rawList.map((item, idx) => {
-  const primaryImg = item.primary_image_url || 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cf?q=80&w=500&auto=format&fit=crop';
+  const primaryImg = item.primary_image_url || 'https://cdn.shopify.com/s/files/1/0152/6530/0544/products/curry-leaves_0e540a77-2c5e-4263-9594-01f0f63e9bde.jpg?v=1642501396';
   const category = mapCategory(item.product_type);
   const cleanDesc = cleanHtml(item.description);
 

@@ -34,10 +34,10 @@ export const CartDrawer: React.FC = () => {
         onClick={() => toggleCart(false)}
       />
 
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
+      <div className="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
         
         {/* Slide-over panel */}
-        <div className="w-screen max-w-md bg-white shadow-2xl flex flex-col justify-between border-l border-slate-200 animate-in slide-in-from-right duration-300">
+        <div className="w-screen max-w-full sm:max-w-md bg-white shadow-2xl flex flex-col justify-between border-l border-slate-200 animate-in slide-in-from-right duration-300">
           
           {/* Header */}
           <div className="p-5 border-b border-slate-100 bg-slate-50/80 flex items-center justify-between">
